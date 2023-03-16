@@ -14,6 +14,6 @@ setuptools.setup(
         description='Tools for Technical Consultants - Like never seen before.',
         url='https://github.com/sycbarry/consulting_utils.git', 
         license='MIT', 
-        install_requires=['pandas', 'langchain', 'oracledb', 'ibm-db', 'untangle', 'openai', 'tqdm', 'cx_Oracle --upgrade', 'tqdm', 'setuptools'],
+        install_requires=['pandas', 'langchain', 'oracledb', 'ibm-db', 'untangle', 'openai', 'tqdm', 'cx_Oracle', 'tqdm', 'setuptools'],
         packages=find_packages(),
         )
