@@ -8,7 +8,7 @@ Modularized and simple components to interface with LLMs and Databases.
 
 ### Step 1
 ```
-pip3 install...
+pip3 install git+https://github.com/sycbarry/consulting_utils.git
 ```
 
 ### Step 2
