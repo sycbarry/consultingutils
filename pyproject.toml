@@ -1,5 +1,5 @@
 [build-system]
-requires = ['pandas', 'langchain', 'oracledb', 'ibm-db', 'untangle', 'openai', 'tqdm', 'cx_Oracle --upgrade', 'tqdm']
+requires = ['pandas', 'langchain', 'oracledb', 'ibm-db', 'untangle', 'openai', 'tqdm', 'cx_Oracle', 'tqdm']
 
 
 [project]
