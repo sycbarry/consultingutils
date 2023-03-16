@@ -1,5 +1,5 @@
 [build-system]
-requires = ['pandas', 'langchain', 'oracledb', 'ibm-db', 'untangle', 'openai', 'tqdm', 'cx_Oracle --upgrade', 'tqdm'],
+requires = ['pandas', 'langchain', 'oracledb', 'ibm-db', 'untangle', 'openai', 'tqdm', 'cx_Oracle --upgrade', 'tqdm']
 
 
 [project]
@@ -8,6 +8,6 @@ version = "0.0.1"
 authors = [
 { name="Sebastian Barry", email="barrys@sms-inc.net" },
 ]
-description='Tools for Technical Consultants - Like never seen before.',
+description='Tools for Technical Consultants - Like never seen before.'
 readme="README.md"
 requires-python=">=3.6"
