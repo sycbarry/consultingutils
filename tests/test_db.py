@@ -30,6 +30,8 @@ class Test(unittest.TestCase):
 
         rows = db2.testquery("select count(*) from maximo.asset;")
 
+        results = db2.query("select assetnum, description from maximo.asset where 1 = 1;")
+
         oracle_pw = ""
         oracle_user = ""
         oracle_dsn = "" 
@@ -38,12 +40,16 @@ class Test(unittest.TestCase):
             pw=oracle_pw, 
             user=oracle_user, 
             dsn=oracle_dsn, 
-            libdir=r"C:\Users\barrys\Python_Scripts\consultingutils\instantclient_21_9" # include full path here. 
+            libdir=r"C:\Users\barrys\Python_Scripts\Drivers\instantclient_21_9" # include full path here. 
         )
 
         sql = "select design, reportname from reportdesign where reportname in (select reportname from reportadhoc)"
         results = oracle.testquery(sql, isreturnable=True)
 
+
+        sql  = "select assetnum, description from asset where 1 = 1"
+        results = oracle.query(sql, ["assetnum", "description"])
+        print(results[0])
 
 
         sql = "selectd design, reportname from reportdesign where reportname in (select reportname from reportadhoc)"
