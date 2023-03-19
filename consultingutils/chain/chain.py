@@ -46,7 +46,8 @@ class Chain(object):
 
 """
 The zero shot chain is a chain that attempts to improve its previous results through testing.
-The idea here is that the chain will go through a self re-inforcement learning cycle.
+The idea here is that the chain will go through a self re-inforcement learning cycle with no 
+initial knowledge on a subject.
 """
 
 class ZeroShotChain(object): 
@@ -60,5 +61,26 @@ class ZeroShotChain(object):
 
         if input == None: 
             raise FileNotFoundError("no input provided to this chain.")
+
+
+"""
+Zero shot chain - this is a chain that
+reads from documentation and aims to teach itself what 
+to do along the way, at each point of failure. 
+
+More robust than a single ZeroShotChain
+"""
+class ZeroShotChainFromDocs(ZeroShotChain): 
+
+
+    def __init__(self, *args, **kwargs) -> None:
+        self.__init__(*args, **kwargs)
+        pass
+
+    def __invoke__(input=None): 
+        if input == None: 
+            raise Exception('no input to files found.')
+
+
 
 

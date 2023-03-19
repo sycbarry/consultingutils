@@ -112,7 +112,8 @@ class Maximo(EAM):
 
 
     def push_script(self, ds=None): 
-      request = urllib.request.Request(self.endpoint + "autoscript", data=ds, headers={"MAXAUTH": self.api_key}, method="POST")
+      import json
+      request = urllib.request.Request(self.endpoint + "autoscript", data=json.dumps(ds), headers={"MAXAUTH": self.api_key, "Accept": "application/json", "Content-Type": "application/json"}, method="POST")
       try: 
         with urllib.request.urlopen(request) as response: 
             return response

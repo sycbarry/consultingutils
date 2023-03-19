@@ -13,6 +13,7 @@ class Test(unittest.TestCase):
         super(Test, self).__init__(*args, **kwargs)
 
     def test_one(self): 
+
         maximo = Maximo(
             api_key="", 
             endpoint=""
@@ -24,7 +25,8 @@ class Test(unittest.TestCase):
         os.environ["OPENAI_API_KEY"] = ""
 
         # invoke maximo obj
-        new_script =  maximo.integration_script_inbound()\
+        new_script =  maximo\
+            .integration_script_inbound()\
             .make_from_requirement(r"C:\Users\barrys\Python_Scripts\consultingutils\tests\requirement.conf")
 
             #.add_mapping_reference(r"C:\Users\barrys\Python_Scripts\consultingutils\tests\maximo.json")\
