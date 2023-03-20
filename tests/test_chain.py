@@ -5,7 +5,7 @@ import os
 
 from consultingutils.llmtemplates.llmtemplates import LLMTemplate, OracleToDB2SQL
 from consultingutils.eam.eam import EAM, Maximo
-from consultingutils.chain.chain import ZeroShotChain
+from consultingutils.chain.chain import ZeroShotChain, ZeroShotChainFromDocs
 
 class Test(unittest.TestCase): 
 
@@ -14,3 +14,5 @@ class Test(unittest.TestCase):
 
     def test_one(self): 
         self.assertTrue(True, True)
+
+        chain = ZeroShotChainFromDocs()

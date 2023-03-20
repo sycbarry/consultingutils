@@ -186,9 +186,13 @@ class ParseStringToOracleSQL(LLMTemplate):
     
         1. extract and concatenate the SQL from the string of the sqlText variable up to the point that the sqlText variable ends with a semicolon.
         2. replace params["where"] with 1=1
-        3. Ensure that the syntax of this query is appropriate for Oracle databases. Ensure that the semicolon at the end of the query is removed. 
+        3. Ensure that the syntax of this query is appropriate for an Oracle databases. 
+        4. Only after the from statement, prefix each table name with maximo.
+        5. after a join statement, if the join statement contains an alias to a table, only prefix the table name with maximo.
+        7. Do not include a semicolon at the end of the updated SQL query. 
     
         Return only the new SQL statement. Do not include anything other than SQL in your response. 
+
         """
 
     def invoke(self, input):
