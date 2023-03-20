@@ -22,6 +22,14 @@ class DB(object):
     def testquery(self, query=None, isreturnable=True): 
         return 
 
+    #() -> returns a list of obj from the db.
+    """
+    query = pass in the query
+    kwargs =  pass in the names of tables that we are returning.
+    """
+    def query(self, query=None, **kwargs):
+        return
+
     @property
     def get_user(self): 
         return self.user
@@ -29,6 +37,8 @@ class DB(object):
     @property 
     def get_pw(self): 
         return self.pw
+
+    
 
 
 class DB2(DB): 
@@ -80,6 +90,34 @@ class DB2(DB):
         except Exception as e: 
             print(e) 
             return Exception(e)
+
+
+    """
+    args: 
+    query = "string sql"
+    () -> [ { } ]
+    """
+    def query(self, query=None, 
+    *args, **kwargs
+    ): 
+        if query == None: 
+            raise FileNotFoundError("No query has been provided in the method.")  
+        try: 
+            connection = ibm_db.connect(self.dsn, '' ,'')
+            statement = ibm_db.exec_immediate(
+                connection, query
+            )
+            result = []
+            rows = ibm_db.fetch_both(statement)
+            while rows != False: 
+                result.append(rows)
+                rows = (ibm_db.fetch_both(statement))
+            return result
+        except Exception as e: 
+            print(e)
+            return Exception(e)
+
+
 
 
 class Oracle(DB): 
@@ -148,3 +186,41 @@ class Oracle(DB):
         except Exception as e: 
             print(e) 
             return Exception(e)
+
+
+    """
+    query = " select value, value2 from table"
+    *args = [ "value", "value2" ]
+
+    include the column names as an array of strings.  
+    each of the column names must be the same expected to be received included in the query. 
+
+    ex. 
+    ---
+    query = select value1, value2 from tablename
+    *args = [ "value1", "value2" ]
+
+    """
+    def query(self, query=None, *args): 
+        if query is None: 
+            raise Exception("Invalid query inputted.")
+        try: 
+            connection = cx_Oracle.connect(
+                user=self.user, 
+                password=self.pw, 
+                dsn = self.dsn
+            )
+            cursor = connection.cursor()
+            try: 
+                rows = []
+                for row in cursor.execute(query): 
+                    rows.append( { value : row[index] for index, value in enumerate(*args) } )
+                return rows
+            except Exception as e:
+                print(e)
+                return Exception(e)
+        except Exception as e: 
+            print(e)
+            return Exception(e)
+
+    

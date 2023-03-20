@@ -30,6 +30,9 @@ class LLMTemplate(object):
 
         return self
 
+    @property
+    def  __gettemplateprompt__(self): 
+        return self.template.format()
 
     """
     builds the templates prompt template. 
@@ -183,9 +186,13 @@ class ParseStringToOracleSQL(LLMTemplate):
     
         1. extract and concatenate the SQL from the string of the sqlText variable up to the point that the sqlText variable ends with a semicolon.
         2. replace params["where"] with 1=1
-        3. Ensure that the syntax of this query is appropriate for Oracle databases. Ensure that the semicolon at the end of the query is removed. 
+        3. Ensure that the syntax of this query is appropriate for an Oracle databases. 
+        4. Only after the from statement, prefix each table name with maximo.
+        5. after a join statement, if the join statement contains an alias to a table, only prefix the table name with maximo.
+        7. Do not include a semicolon at the end of the updated SQL query. 
     
         Return only the new SQL statement. Do not include anything other than SQL in your response. 
+
         """
 
     def invoke(self, input):
@@ -210,6 +217,163 @@ class WhiteLabelTemplate(LLMTemplate):
             raise Exception("Invalid args: ['1', '2'] needed")
         self.args = args
         self.kwargs = kwargs
+
+
+
+
+"""
+Maximo Automation Script template - script generation
+"""
+class MaximoAutomationScriptTemplateScript(LLMTemplate): 
+
+    def __init__(self, input=None, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+        self.args = ["requirement"]
+        self.input = input
+
+        self.prompt = """
+        Here is an IBM Maximo EAM requirement. The requirement is as follows: {requirement}.
+    
+        The user intends to write a Maximo Automation Script in the Jython programming language. 
+
+        I want you to: 
+    
+        1. Convert the requirement in Jython. 
+        2. The Maximo system does not include access to the os or system libraries. Try and use the native mbo and jython libraries in your output.
+    
+        Return only the code. Do not include anything other than the code in your response. 
+        """
+
+    def invoke(self, input):
+        super().__buildtemplate__()
+        super().__buildchain__()
+        return super().__invoke__(input)
+
+"""
+Maximo Automation Script template - script for inboud integration 
+"""
+class MaximoAutomationScriptTemplateScript_IntegrationInbound(LLMTemplate): 
+
+    def __init__(self, input=None, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+        self.args = [ "requirement" ]
+        self.input = input
+
+        self.prompt = """
+        Here is an IBM Maximo EAM requirement. The requirement is as follows: {requirement}.
+    
+        The user intends to write a Maximo Automation Script in the Jython programming language. 
+
+        This script is an inbound integration. Meaning, that the script will activate at some point in the message queue when the user is sending data from an external system into Maximo.
+
+        I want you to: 
+    
+        1. Convert the requirement in Jython. 
+        2. The Maximo system does not include access to the os or system libraries. Try and use the native mbo and jython libraries in your output.
+        3. The script has access to certain implicit variables, meaning that when the script activates, it can access the inbound record by using the irData and erData respectively. 
+
+        Return only the code. Do not include anything other than the code in your response. 
+
+        """
+
+    def invoke(self, input):
+        super().__buildtemplate__()
+        super().__buildchain__()
+        return super().__invoke__(input)
+
+
+"""
+Maximo Automation Script template - description generation
+
+** args = takes in the original requirement as input.
+
+"""
+class MaximoAutomationScriptTemplateDescription(LLMTemplate): 
+
+    def __init__(self, input=None, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+        self.args = ["requirement"]
+        self.input = input
+
+        self.prompt = """
+        Here is an IBM Maximo Automation requirement. The requirement is as follows: {requirement}.
+    
+        I just asked you to write the script for it, however.
+
+        I want you to: 
+    
+        1. Convert this requirement into a small, 50 word long description. 
+        2. The description must simplify the requirement that I just passed to you. 
+    
+        Return only the description. Nothing else. 
+        """
+
+    """
+    input must be the original requirement
+    """
+    def invoke(self, input):
+        super().__buildtemplate__()
+        super().__buildchain__()
+        return super().__invoke__(input)
+
+
+"""
+Maximo Automation Script template - automation script name generation
+
+** args = takes in the original requirement as input.
+
+"""
+class MaximoAutomationScriptTemplateName(LLMTemplate): 
+
+    def __init__(self, input=None, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+        self.args = ["requirement"]
+        self.input = input
+
+        self.prompt = """
+        Here is an IBM Maximo Automation requirement. The requirement is as follows: {requirement}.
+    
+        I just asked you to write the script for it, however.
+
+        I want you to: 
+    
+        1. Give this requirement a simple name.  
+        2. The name must be in all upper case characters and consist of underscore _ values in between each word. 
+        2. The name cannot be longer than 20 characters long.
+    
+        Return only the name. Nothing else.
+        """
+
+    """
+    input must be the original requirement
+    """
+    def invoke(self, input):
+        super().__buildtemplate__()
+        super().__buildchain__()
+        return super().__invoke__(input)
+    
+
+
+
+
+
+
+
+
+
+
 
 
 
