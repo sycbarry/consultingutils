@@ -95,39 +95,6 @@ class CleaningTemplate(LLMTemplate):
 
     
 
-"""
-
-Oracle To DB2 SQL Conversion Template
--- converting an oracle sql query into a db2 query.
-
-"""
-class OracleToDB2SQL(LLMTemplate): 
-
-
-    def __init__(self, sql=None, *args, **kwargs):
-
-        super().__init__(*args, **kwargs)
-
-
-        self.args = ["raw_sql"]
-
-        self.prompt = """
-        Here is an Oracle SQL query: {raw_sql}. 
-    
-        I want you to: 
-    
-        1. Consider each table name in the query. 
-        2. Pre-pend the database name to each table name. The database name is maximo. Do not pre-prend the database name to the column names.  
-        3. Ensure to add a semicolon at the end of the query. 
-    
-        Return only the new SQL statement. Do not include anything other than the SQL in your reponse. 
-        """
-
-    def invoke(self, input):
-        super().__buildtemplate__()
-        super().__buildchain__()
-        return super().__invoke__(input)
-
 
 """
 
@@ -148,10 +115,32 @@ class OracleToDB2SQL(LLMTemplate):
         self.prompt = """
         Here is a DB2 SQL query: {raw_sql}. 
     
-        I want you to: 
-    
-        1. Convert the statement into an Oracle SQL Query. 
-        2. If table names are pre-pended with database names, remove them. An example is like: maximo.table_name would convert to table_name
+        Follow these rules for converting the Oracle SQL Query to a DB2 SQL Query: 
+
+        1. Replace all Oracle specific keywords and functions with the equivalent DB2 keywords and functions.
+        2. Make sure to use the appropriate data types (e.g. VARCHAR2 in Oracle vs VARCHAR in DB2).
+        3. Verify that the syntax for any JOINs is correct for DB2.
+        4. If the Oracle query uses an outer join, make sure to use the correct syntax for DB2.
+        5. If the Oracle query uses the CONNECT BY PRIOR clause, replace it with a recursive common table expression in DB2.
+        6. Pay attention to the way NULLs are handled.
+        7. If the Oracle query uses PL/SQL variables, make sure to replace them with appropriate DB2 variables.
+        8. Make sure to use the correct value for the MAXIMO database name in the query.
+        9. Change all references to the keyword 'SYSDATE' to 'CURRENT TIMESTAMP'.
+        10. If the table name starts with 'MAXIMO_', prefix it with 'MAXIMO'.
+        12. Replace the keyword 'NVL' with 'COALESCE'.
+        13. Replace the keyword 'ROWNUM' with 'ROW_NUMBER() OVER'.
+        14. Replace the keyword 'CONCAT' with '||'.
+        15. Replace the keyword 'CONNECT BY' with 'WITH RECURSIVE'.
+        16. Use the 'MAXIMO.TABLE_NAME' syntax for table names, and suffix with an alias.
+        17. Use the 'MAXIMO.COLUMN_NAME' syntax for column names.
+        18. Replace the keyword 'INSTR' with 'LOCATE'.
+
+        19. Keep single quotes as they are, and do not try and wrap double quotes around single quotes. 
+        20. remove all semicolons at the end of the query.
+
+        21: Always leave a space before the closing parenthesis when writing a SQL statement.
+
+        22. Do not include a time zone in the query.
 
         Return only the new SQL statement. Do not include anything other than the SQL in your reponse. 
 
@@ -187,9 +176,7 @@ class ParseStringToOracleSQL(LLMTemplate):
         1. extract and concatenate the SQL from the string of the sqlText variable up to the point that the sqlText variable ends with a semicolon.
         2. replace params["where"] with 1=1
         3. Ensure that the syntax of this query is appropriate for an Oracle databases. 
-        4. Only after the from statement, prefix each table name with maximo.
-        5. after a join statement, if the join statement contains an alias to a table, only prefix the table name with maximo.
-        7. Do not include a semicolon at the end of the updated SQL query. 
+        4. Remove the semicolon from the end of the statement. 
     
         Return only the new SQL statement. Do not include anything other than SQL in your response. 
 
