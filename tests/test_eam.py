@@ -32,10 +32,11 @@ class Test(unittest.TestCase):
             #.add_mapping_reference(r"C:\Users\barrys\Python_Scripts\consultingutils\tests\maximo.json")\
 
         # test script smoehow.
+        print(new_script)
 
         # push to maximo.
         # TODO finish this.
-        response = maximo.push_script(new_script)
-        print(response)
+        #response = maximo.push_script(new_script)
+        #print(response)
 
         return None

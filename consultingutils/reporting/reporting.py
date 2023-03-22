@@ -128,9 +128,9 @@ class ReportValidator(Reporting):
         if p > 100 or p < 1: 
             raise Exception("cannot process more than 100% of reports. ")
         _p = math.ceil( (p / 100) * (len(self.batch)) )
+        self._p = _p
         self.batch[:_p] = self.clean(self.batch[:_p])
-        self.validate(self.batch[:_p])
-        return self
+        return self.validate(self.batch[:_p])
 
 
     """
@@ -147,7 +147,7 @@ class ReportValidator(Reporting):
         for i in tqdm( range( len(obj) ) ):
             # the mode cleans the text
             clean_response = ParseStringToOracleSQL().invoke(obj[i]['rawtxt'])
-            obj[i]['oraclesql'] = clean_response
+            obj[i]['oraclesql'] = clean_response.strip(";")
 
             # the model converts it into a db2 query.
             db2_conversion = OracleToDB2SQL().invoke(clean_response)
@@ -221,7 +221,7 @@ class ReportValidator(Reporting):
 
                     def db2(sql_obj=None): 
                         if sql_obj is not None: 
-                            db2_sql = sql_obj.strip()
+                            db2_sql = sql_obj.strip(";")
                             result = map( 
                                 lambda x: 
                                     x.testquery(db2_sql, isreturnable=False) 
@@ -266,6 +266,11 @@ class ReportValidator(Reporting):
     
             # run through the sql tsting phase. 
             write_sql(file_name)
+
+
+        return obj
+
+
 
 
 
