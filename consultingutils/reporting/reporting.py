@@ -44,12 +44,15 @@ class ReportValidator(Reporting):
     grab the reports, including the report name and the reportdesign from the 
     source databases
     """
-    def pull_adhoc_reports(self): 
+    def pull_adhoc_reports(self, limit: int =None) -> None: 
 
 
         if isinstance(self.sourcedb, Oracle):
 
-            query = " select design, reportname from reportdesign where reportname in (select reportname from reportadhoc) "
+            if limit == None or not isinstance(limit, int): 
+                query = " select design, reportname from reportdesign where reportname in (select reportname from reportadhoc) "
+            else: 
+                query = " select design, reportname from reportdesign where reportname in (select reportname from reportadhoc) fetch first " + limit.__str__() + " only "
 
             result = self.sourcedb.testquery(query=query, isreturnable=True)
 
