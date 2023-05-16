@@ -57,7 +57,7 @@ class LLMTemplate(object):
         if self.template == None: 
             raise NotImplementedError("no prompt template generated")
         
-        llm = OpenAI(temperature=0.9)
+        llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.9, best_of=1)
         self.chain = LLMChain(llm=llm, prompt=self.template)
 
         return self
@@ -113,9 +113,9 @@ class OracleToDB2SQL(LLMTemplate):
         self.args = ["raw_sql"]
 
         self.prompt = """
-        Here is a DB2 SQL query: {raw_sql}. 
+        Here is an Oracle SQL query that I want you to convert to a DB2 Query: {raw_sql}. 
 
-        You will convert a DB2 SQL Query using the following rules: 
+        Follow these rules: 
 
         1.	For every table mentioned in the SQL statement, check if a qualifier is present. If not, add the qualifier before the table name. The qualifier will be separated from the table name by a dot (.).
         2.	Check if an alias is already assigned to each table. If not, assign an alias that is the same as the table name. The alias will be assigned using the 'AS' keyword (optional in many SQL dialects) after the table name.
@@ -136,6 +136,7 @@ class OracleToDB2SQL(LLMTemplate):
 
         Note: The rule applies to all table names in the SQL statement, including those in JOIN clauses.
 
+        Only return the SQL query as a single response. 
         """
 
     def invoke(self, input):
