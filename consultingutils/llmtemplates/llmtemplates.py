@@ -114,35 +114,27 @@ class OracleToDB2SQL(LLMTemplate):
 
         self.prompt = """
         Here is a DB2 SQL query: {raw_sql}. 
-    
-        Follow these rules for converting the Oracle SQL Query to a DB2 SQL Query: 
 
-        1. Replace all Oracle specific keywords and functions with the equivalent DB2 keywords and functions.
-        2. Make sure to use the appropriate data types (e.g. VARCHAR2 in Oracle vs VARCHAR in DB2).
-        3. Verify that the syntax for any JOINs is correct for DB2.
-        4. If the Oracle query uses an outer join, make sure to use the correct syntax for DB2.
-        5. If the Oracle query uses the CONNECT BY PRIOR clause, replace it with a recursive common table expression in DB2.
-        6. Pay attention to the way NULLs are handled.
-        7. If the Oracle query uses PL/SQL variables, make sure to replace them with appropriate DB2 variables.
-        8. Make sure to use the correct value for the MAXIMO database name in the query.
-        9. Change all references to the keyword 'SYSDATE' to 'CURRENT TIMESTAMP'.
-        10. If the table name starts with 'MAXIMO_', prefix it with 'MAXIMO'.
-        12. Replace the keyword 'NVL' with 'COALESCE'.
-        13. Replace the keyword 'ROWNUM' with 'ROW_NUMBER() OVER'.
-        14. Replace the keyword 'CONCAT' with '||'.
-        15. Replace the keyword 'CONNECT BY' with 'WITH RECURSIVE'.
-        16. Use the 'MAXIMO.TABLE_NAME' syntax for table names, and suffix with an alias.
-        17. Use the 'MAXIMO.COLUMN_NAME' syntax for column names.
-        18. Replace the keyword 'INSTR' with 'LOCATE'.
+        You will convert a DB2 SQL Query using the following rules: 
 
-        19. Keep single quotes as they are, and do not try and wrap double quotes around single quotes. 
-        20. remove all semicolons at the end of the query.
+        1.	For every table mentioned in the SQL statement, check if a qualifier is present. If not, add the qualifier before the table name. The qualifier will be separated from the table name by a dot (.).
+        2.	Check if an alias is already assigned to each table. If not, assign an alias that is the same as the table name. The alias will be assigned using the 'AS' keyword (optional in many SQL dialects) after the table name.
 
-        21: Always leave a space before the closing parenthesis when writing a SQL statement.
+        Example transformation using the rule:
 
-        22. Do not include a time zone in the query.
+        Original SQL:
+        FROM workorder
 
-        Return only the new SQL statement. Do not include anything other than the SQL in your reponse. 
+        Transformed SQL:
+        FROM maximo.workorder AS workorder
+
+        Where:
+        •	'maximo' is the qualifier to be added.
+        •	'workorder' is the table name.
+        •	'AS' is the keyword used for assigning alias (optional in many SQL dialects).
+        •	The second 'workorder' is the alias, which is the same as the table name in this case.
+
+        Note: The rule applies to all table names in the SQL statement, including those in JOIN clauses.
 
         """
 
@@ -376,3 +368,18 @@ class MaximoAutomationScriptTemplateName(LLMTemplate):
 
 
 
+"""
+1.	For every table mentioned in the SQL statement, check if a qualifier is present. If not, add the qualifier before the table name. The qualifier will be separated from the table name by a dot (.).
+2.	Check if an alias is already assigned to each table. If not, assign an alias that is the same as the table name. The alias will be assigned using the 'AS' keyword (optional in many SQL dialects) after the table name.
+Example transformation using the rule:
+Original SQL:
+FROM workorder
+Transformed SQL:
+FROM maximo.workorder AS workorder
+Where:
+•	'maximo' is the qualifier to be added.
+•	'workorder' is the table name.
+•	'AS' is the keyword used for assigning alias (optional in many SQL dialects).
+•	The second 'workorder' is the alias, which is the same as the table name in this case.
+Note: The rule applies to all table names in the SQL statement, including those in JOIN clauses.
+"""
