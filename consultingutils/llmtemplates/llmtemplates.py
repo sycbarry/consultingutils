@@ -57,7 +57,7 @@ class LLMTemplate(object):
         if self.template == None: 
             raise NotImplementedError("no prompt template generated")
         
-        llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.9, best_of=1)
+        llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.9)
         self.chain = LLMChain(llm=llm, prompt=self.template)
 
         return self

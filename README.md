@@ -19,6 +19,11 @@ from consultingutils.db.db import Oracle,DB2
 from consultingutils.reporting.reporting import ReportValidator
 ```
 
+## Exploring 
+1. [ ] Build out .conf files that we pass into the LLM as requirements. These contain specified workflows. 
+2. [ ] Build out LLM templates. 
+3. [ ] Build out LLM Chain workflows. 
+
 
 ## Examples: 
 
